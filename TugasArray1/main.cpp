@@ -100,6 +100,18 @@ float Biggest (float L[100], int M){
     return temp;
 }
 
+void DeleteBiggest (float L[100], int *M, float big){
+    //Mendefinisikan Akhir Array
+    int BACK = *M;
+    //Mencari elemen yang memiliki nilai sama dengan nilai maksimum
+    for (int i=BACK; i>=0; i--){
+        if (L[i]==big){
+            //Proses Menghapus
+            Delete(L,&BACK,i);
+        }
+    }
+    *M = BACK;
+}
 
 int main (){
     // Index array pada C dimulai dari 0.
@@ -175,5 +187,12 @@ int main (){
     big=Biggest(L,M);
     printf("Nilai maksimumnya adalah %.f\n",big);
     system("PAUSE");
+
+    //Menghapus Nilai Maksimum
+    printf("\nMenghapus nilai maksimum...\n");
+    DeleteBiggest(L,&M,big);
+    printf("Data Dengan Nilai %.f Telah Dihapus!\n",big);
+    Cetak (L , M );
+
     return 0;
 }
