@@ -89,6 +89,17 @@ void DeleteAll (float L[100], int *M){
     *M = BACK;
 }
 
+float Biggest (float L[100], int M){
+    float temp=0;
+    // Traversal untuk mencari nilai terbesar
+    for (int i=0; i<=M; i++){
+        if (L[i]>temp){
+            temp=L[i];
+        }
+    }
+    return temp;
+}
+
 
 int main (){
     // Index array pada C dimulai dari 0.
@@ -158,5 +169,11 @@ int main (){
     Cetak (L, M);
     system("PAUSE");
 
+    //Mencari Nilai Maksimum
+    printf("\nMencari nilai maksimum...\n");
+    float big;
+    big=Biggest(L,M);
+    printf("Nilai maksimumnya adalah %.f\n",big);
+    system("PAUSE");
     return 0;
 }
