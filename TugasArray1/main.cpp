@@ -89,12 +89,13 @@ void DeleteAll (float L[100], int *M){
     *M = BACK;
 }
 
-float Biggest (float L[100], int M){
+float Biggest (float L[100], int M, int *pos){
     float temp=0;
     // Traversal untuk mencari nilai terbesar
     for (int i=0; i<=M; i++){
         if (L[i]>temp){
             temp=L[i];
+            *pos=i;
         }
     }
     return temp;
@@ -118,7 +119,7 @@ int main (){
     float L [100];
 
     //M= -1 Array kosong
-    int M ;
+    int M;
     M = -1;
 
     // Menambah lima Item pada array .
@@ -165,6 +166,7 @@ int main (){
     //Menambahkan Item Baru
     system("CLS");
     printf("Membuat Array Baru...\n");
+    Append (L ,& M ,15);
     Append (L ,& M ,4);
     Append (L ,& M ,10);
     Append (L ,& M ,1);
@@ -184,8 +186,8 @@ int main (){
     //Mencari Nilai Maksimum
     printf("\nMencari nilai maksimum...\n");
     float big;
-    big=Biggest(L,M);
-    printf("Nilai maksimumnya adalah %.f\n",big);
+    big=Biggest(L,M,&pos);
+    printf("Nilai maksimumnya adalah %.f pada posisi %d\n",big,pos);
     system("PAUSE");
 
     //Menghapus Nilai Maksimum
