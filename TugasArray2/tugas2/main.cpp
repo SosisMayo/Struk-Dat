@@ -5,6 +5,7 @@ using namespace std;
 // M sebagai penunjuk akhir array, posisi untuk menyimpan index yang dicari
 int M = -1;
 
+int main();
 struct CKota{
     string nama;
     float x,y;
@@ -75,10 +76,11 @@ void sisipkan(string nama,float x,float y,int posisi){
     }
 }
 
-void hapus(string nama){
+void hapus(string nama, int *hasil){
     int posisi,akhir;
     cari(nama,&posisi);
     if (posisi!=-1){
+        *hasil=1;
         M = M -1;
         for (int i = posisi;i<=M;i++){
             akhir = Kota[i+1].indexTerakhirTujuan;
@@ -104,9 +106,6 @@ void hapus(string nama){
             }
         }
     }
-    else{
-        cout << "Kota yang akan dihapus tidak ditemukan !" << endl;
-    }
 }
 
 void tampilkanSemua(){
@@ -124,36 +123,136 @@ void tampilkanSemua(){
     }
 }
 
-int main()
-{
-    int posisi;
+void inputUser(int pilihan){
+    int pilih=99;
+    system("CLS");
+    if (pilihan==1){
+        string nama;
+        float x,y;
+        cout << "TAMBAH DATA BARU" << endl;
+        cout << "Masukkan Nama Kota :" << endl;
+        cin >> nama;
+        cout << "Masukkan Koordinat X :" << endl;
+        cin >> x;
+        cout << "Masukkan Koordinat Y :" << endl;
+        cin >> y;
+        tambah(nama,x,y);
+        system("CLS");
+        cout << "Data Baru Telah Ditambahkan!" << endl;
+    }
+    if (pilihan==2){
+        string nama;
+        int posisi;
+        cout << "CARI DATA BERDASARKAN NAMA" << endl;
+        cout << "Masukkan Nama Kota :" << endl;
+        cin >> nama;
+        cari(nama,&posisi);
+        system("CLS");
+        if (posisi!=-1){
+           cout << "Data Kota Ditemukan pada index ke :" << posisi << endl;
+           cout << "Nama Kota : "<< nama << endl;
+           cout << "Koordinat X : "<< Kota[posisi].x << endl;
+           cout << "Koordinat Y : "<< Kota[posisi].y << endl;
+        }
+        else {
+            cout << "Data Kota " << nama << " Tidak Ditemukan!"<< endl;
+        }
+    }
+    if (pilihan==3){
+        string nama;
+        float x,y,posisi;
+        cout << "MENYISIPKAN DATA BARU" << endl;
+        cout << "Masukkan Nama Kota :" << endl;
+        cin >> nama;
+        cout << "Masukkan Koordinat X :" << endl;
+        cin >> x;
+        cout << "Masukkan Koordinat Y :" << endl;
+        cin >> y;
+        cout << "Data Disisipkan Pada Index :" << endl;
+        cin >> posisi;
+        sisipkan(nama,x,y,posisi);
+        system("CLS");
+        cout << "Data Baru Telah Ditambahkan!" << endl;
+    }
+    if (pilihan==4){
+        string nama;
+        int hasil=0;
+        cout << "MENGHAPUS DATA" << endl;
+        cout << "Masukkan Nama Kota :" << endl;
+        cin >> nama;
+        hapus(nama,&hasil);
+        system("CLS");
+        if (hasil==1){
+            cout << "Data Telah Dihapus!" << endl;
+        }
+        else{
+            cout << "Data Yang Akan Dihapus Tidak Ditemukan!" << endl;
+        }
+    }
+    if (pilihan==5){
+        cout << "Data Kota :" <<endl;
+       tampilkanSemua();
+    }
+    if (pilihan==6){
+        string asal,tujuan;
+        cout << "SAMBUNGKAN DATA" <<endl;
+        cout << "Masukkan Nama Kota Asal : " <<endl;
+        cin >> asal;
+        cout << "Masukkan Nama Kota Tujuan : " <<endl;
+        cin >> tujuan;
+        hubungkan(asal,tujuan);
+        system("CLS");
+        cout << "Data Telah Dihubungkan!" << endl;
+    }
+    while (pilih!=0 || pilih!=1){
+        cout << "Lagi? (1 untuk ya,0 untuk tidak)" << endl;
+        cin >> pilih;
+        if (pilih==1){
+            inputUser(pilihan);
+        }
+        else if (pilih == 0){
+            main();
+        }
+        else{
+            cout << "Input Salah" << endl;
+        }
+    }
+}
 
-    // MENAMBAHKAN DATA KOTA
-    tambah("A",0,0);
-    tambah("B",1,1);
-    tambah("D",1,-1);
-    tambah("F",2,1);
-    tambah("E",3,-1);
-
-    // MENGHUBUNGKAN KOTA SATU DENGAN KOTA LAINNYA
-    hubungkan("A","B");
-    hubungkan("A","D");
-    hubungkan("B","F");
-    hubungkan("B","E");
-    hubungkan("D","F");
-    hubungkan("D","E");
-    tampilkanSemua();
-
-    // MENCARI DATA KOTA MELALUI NAMA KOTA
-    cari("E",&posisi);
-    cout << "Kota E berada pada index " << posisi <<endl;
-
-    // MENYISIPKAN DATA KOTA PADA POSISi TERTENTU
-    sisipkan("Z",-2,7,2);
-    tampilkanSemua();
-
-    // MENGHAPUS DATA KOTA PADA POSISI TERTENTU
-    hapus("Z");
-    tampilkanSemua();
+int main(){
+    int pilihan;
+    system("CLS");
+    cout << "MENU" << endl;
+    cout << "Pilihan 1 : Menambahkan Data Baru" << endl;
+    cout << "Pilihan 2 : Mencari Data Berdasarkan Nama" << endl;
+    cout << "Pilihan 3 : Menyisipkan Data Baru" << endl;
+    cout << "Pilihan 4 : Menghapus Data" << endl;
+    cout << "Pilihan 5 : Menampilkan Semua Data" << endl;
+    cout << "Pilihan 6 : Sambungkan Data" << endl;
+    cout << "Pilihan 7 : Keluar Program" << endl;
+    cout << "Masukkan Pilihan Anda ";
+    cin >> pilihan;
+    switch (pilihan){
+    case 1 :
+        inputUser(1);
+        break;
+    case 2 :
+        inputUser(2);
+        break;
+    case 3 :
+        inputUser(3);
+        break;
+    case 4 :
+        inputUser(4);
+        break;
+    case 5 :
+        inputUser(5);
+        break;
+    case 6 :
+        inputUser(6);
+        break;
+    case 7 :
+        break;
+    }
     return 0;
 }
