@@ -8,7 +8,7 @@ int M = -1;
 struct CKota{
     string nama;
     float x,y;
-    int tujuanKiri = -1, tujuanKanan = -1;
+    int indexTujuan[100],indexTerakhirTujuan=-1;
 };CKota Kota[100];
 
 void tambah(string nama, float x, float y){
@@ -31,79 +31,76 @@ void cari(string nama,int *posisi){
     }
 }
 
-void hubungkan(string asal,string tujuanKiri,string tujuanKanan){
-    int indexAsal,indexTujuanKiri,indexTujuanKanan;
+void hubungkan(string asal,string tujuan){
+    int indexAsal,indexTujuan,akhir;
     cari(asal,&indexAsal);
-    cari(tujuanKiri,&indexTujuanKiri);
-    cari(tujuanKanan,&indexTujuanKanan);
-    Kota[indexAsal].tujuanKiri = indexTujuanKiri;
-    Kota[indexAsal].tujuanKanan = indexTujuanKanan;
+    cari(tujuan,&indexTujuan);
+    Kota[indexAsal].indexTerakhirTujuan ++;
+    akhir = Kota[indexAsal].indexTerakhirTujuan;
+    Kota[indexAsal].indexTujuan[akhir] = indexTujuan;
+
 }
 
 void sisipkan(string nama,float x,float y,int posisi){
+    int akhir;
     if (M < 99){
         M = M + 1;
         for(int i = M; i >= posisi+1; i--){
+            akhir = Kota[i-1].indexTerakhirTujuan;
             Kota[i].nama=Kota[i-1].nama;
             Kota[i].x=Kota[i-1].x;
             Kota[i].y=Kota[i-1].y;
-            if (Kota[i-1].tujuanKanan >= posisi){
-                Kota[i].tujuanKanan=Kota[i-1].tujuanKanan + 1;
-            }
-            else if (Kota[i-1].tujuanKanan < posisi){
-                Kota[i].tujuanKanan=Kota[i-1].tujuanKanan;
-            }
-            if (Kota[i-1].tujuanKiri >= posisi){
-                Kota[i].tujuanKiri=Kota[i-1].tujuanKiri + 1;
-            }
-            else if (Kota[i-1].tujuanKanan < posisi){
-                Kota[i].tujuanKiri=Kota[i-1].tujuanKiri;
+            Kota[i].indexTerakhirTujuan = Kota[i-1].indexTerakhirTujuan;
+            for(int j=0;j<=akhir;j++){
+                if (Kota[i-1].indexTujuan[j] >= posisi){
+                    Kota[i].indexTujuan[j]=Kota[i-1].indexTujuan[j] + 1;
+                }
+                else if (Kota[i-1].indexTujuan[j] < posisi){
+                    Kota[i].indexTujuan[j] = Kota[i-1].indexTujuan[j];
+                }
             }
         }
         for (int i=0;i<posisi;i++){
-            if (Kota[i].tujuanKanan >= posisi){
-                Kota[i].tujuanKanan++;
-            }
-            if (Kota[i].tujuanKiri >= posisi){
-                Kota[i].tujuanKiri++;
+            akhir = Kota[i].indexTerakhirTujuan;
+            for(int j=0;j<=akhir;j++){
+                if (Kota[i].indexTujuan[j] >= posisi){
+                    Kota[i].indexTujuan[j]++;
+                }
             }
         }
         Kota[posisi].nama = nama;
         Kota[posisi].x = x;
         Kota[posisi].y = y;
-        Kota[posisi].tujuanKanan = -1;
-        Kota[posisi].tujuanKiri = -1;
+        Kota[posisi].indexTerakhirTujuan=-1;
     }
 }
 
 void hapus(string nama){
-    int posisi;
+    int posisi,akhir;
     cari(nama,&posisi);
     if (posisi!=-1){
         M = M -1;
         for (int i = posisi;i<=M;i++){
+            akhir = Kota[i+1].indexTerakhirTujuan;
             Kota[i].nama=Kota[i+1].nama;
             Kota[i].x=Kota[i+1].x;
             Kota[i].y=Kota[i+1].y;
-            if (Kota[i+1].tujuanKanan >= posisi){
-                Kota[i].tujuanKanan=Kota[i+1].tujuanKanan - 1;
-            }
-            else if (Kota[i+1].tujuanKanan < posisi){
-                Kota[i].tujuanKanan=Kota[i+1].tujuanKanan;
-            }
-            if (Kota[i+1].tujuanKiri >= posisi){
-                Kota[i].tujuanKiri=Kota[i+1].tujuanKiri - 1;
-            }
-            else if (Kota[i+1].tujuanKanan < posisi){
-                Kota[i].tujuanKiri=Kota[i+1].tujuanKiri;
+            Kota[i].indexTerakhirTujuan = Kota[i+1].indexTerakhirTujuan;
+            for(int j=0;j<=akhir;j++){
+                if (Kota[i+1].indexTujuan[j] >= posisi){
+                    Kota[i].indexTujuan[j] =Kota[i+1].indexTujuan[j] - 1;
+                }
+                else if (Kota[i+1].indexTujuan[j] < posisi){
+                    Kota[i].indexTujuan[j] = Kota[i+1].indexTujuan[j];
+                }
             }
         }
         for (int i=0;i<posisi;i++){
-            if (Kota[i].tujuanKanan >= posisi){
-                Kota[i].tujuanKanan--;
-            }
-            if (Kota[i].tujuanKiri >= posisi){
-                Kota[i].tujuanKiri--;
+            akhir = Kota[i].indexTerakhirTujuan;
+            for (int j=0;j<=akhir;j++){
+                if (Kota[i].indexTujuan[j] >= posisi){
+                Kota[i].indexTujuan[j]--;
+                }
             }
         }
     }
@@ -113,18 +110,16 @@ void hapus(string nama){
 }
 
 void tampilkanSemua(){
+    int akhir;
     for(int i=0;i<=M;i++){
-        if (Kota[i].tujuanKanan != -1 && Kota[i].tujuanKiri != -1 ){
-            cout << "Kota " << Kota[i].nama << " berhubungan dengan Kota " << Kota[Kota[i].tujuanKiri].nama << " dan Kota " << Kota[Kota[i].tujuanKanan].nama << endl;
+        akhir = Kota[i].indexTerakhirTujuan;
+        if (Kota[i].indexTerakhirTujuan==-1){
+            cout << "Kota " << Kota[i].nama << " Tidak memiliki hubungan dengan kota manapun" << endl;
         }
-        else if ((Kota[i].tujuanKanan != -1 && Kota[i].tujuanKiri == -1)){
-            cout << "Kota " << Kota[i].nama << " berhubungan dengan Kota " << Kota[Kota[i].tujuanKanan].nama << endl;
-        }
-        else if ((Kota[i].tujuanKanan == -1 && Kota[i].tujuanKiri != -1)){
-            cout << "Kota " << Kota[i].nama << " berhubungan dengan Kota " << Kota[Kota[i].tujuanKiri].nama << endl;
-        }
-        else if (Kota[i].tujuanKanan == -1 && Kota[i].tujuanKiri == -1 ){
-            cout << "Kota " << Kota[i].nama << " tidak berhubungan dengan kota manapun" << endl;
+        else {
+            for(int j=0;j<=akhir;j++){
+                cout << "Kota " << Kota[i].nama << " Berhubungan dengan Kota " << Kota[Kota[i].indexTujuan[j]].nama << endl;
+            }
         }
     }
 }
@@ -141,9 +136,12 @@ int main()
     tambah("E",3,-1);
 
     // MENGHUBUNGKAN KOTA SATU DENGAN KOTA LAINNYA
-    hubungkan("A","B","D");
-    hubungkan("B","F","E");
-    hubungkan("D","F","E");
+    hubungkan("A","B");
+    hubungkan("A","D");
+    hubungkan("B","F");
+    hubungkan("B","E");
+    hubungkan("D","F");
+    hubungkan("D","E");
     tampilkanSemua();
 
     // MENCARI DATA KOTA MELALUI NAMA KOTA
