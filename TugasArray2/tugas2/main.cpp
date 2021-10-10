@@ -5,16 +5,15 @@ using namespace std;
 // M sebagai penunjuk akhir array, posisi untuk menyimpan index yang dicari
 int M = -1;
 
-class CKota{
-public:
+struct CKota{
     string nama;
     float x,y;
     int tujuanKiri = -1, tujuanKanan = -1;
 };CKota Kota[100];
 
-void tambah(string nama, int x, int y){
-    int N = 100;
-    if (M < N - 1){
+void tambah(string nama, float x, float y){
+    int N = 99;
+    if (M < N){
         M = M + 1;
         Kota[M].nama = nama;
         Kota[M].x = x;
@@ -41,7 +40,7 @@ void hubungkan(string asal,string tujuanKiri,string tujuanKanan){
     Kota[indexAsal].tujuanKanan = indexTujuanKanan;
 }
 
-void sisipkan(string nama,int x,int y,int posisi){
+void sisipkan(string nama,float x,float y,int posisi){
     if (M < 99){
         M = M + 1;
         for(int i = M; i >= posisi+1; i--){
@@ -80,31 +79,36 @@ void sisipkan(string nama,int x,int y,int posisi){
 void hapus(string nama){
     int posisi;
     cari(nama,&posisi);
-    M = M -1;
-    for (int i = posisi;i<=M;i++){
-        Kota[i].nama=Kota[i+1].nama;
-        Kota[i].x=Kota[i+1].x;
-        Kota[i].y=Kota[i+1].y;
-        if (Kota[i+1].tujuanKanan >= posisi){
-            Kota[i].tujuanKanan=Kota[i+1].tujuanKanan - 1;
+    if (posisi!=-1){
+        M = M -1;
+        for (int i = posisi;i<=M;i++){
+            Kota[i].nama=Kota[i+1].nama;
+            Kota[i].x=Kota[i+1].x;
+            Kota[i].y=Kota[i+1].y;
+            if (Kota[i+1].tujuanKanan >= posisi){
+                Kota[i].tujuanKanan=Kota[i+1].tujuanKanan - 1;
+            }
+            else if (Kota[i+1].tujuanKanan < posisi){
+                Kota[i].tujuanKanan=Kota[i+1].tujuanKanan;
+            }
+            if (Kota[i+1].tujuanKiri >= posisi){
+                Kota[i].tujuanKiri=Kota[i+1].tujuanKiri - 1;
+            }
+            else if (Kota[i+1].tujuanKanan < posisi){
+                Kota[i].tujuanKiri=Kota[i+1].tujuanKiri;
+            }
         }
-        else if (Kota[i+1].tujuanKanan < posisi){
-            Kota[i].tujuanKanan=Kota[i+1].tujuanKanan;
-        }
-        if (Kota[i+1].tujuanKiri >= posisi){
-            Kota[i].tujuanKiri=Kota[i+1].tujuanKiri - 1;
-        }
-        else if (Kota[i+1].tujuanKanan < posisi){
-            Kota[i].tujuanKiri=Kota[i+1].tujuanKiri;
+        for (int i=0;i<posisi;i++){
+            if (Kota[i].tujuanKanan >= posisi){
+                Kota[i].tujuanKanan--;
+            }
+            if (Kota[i].tujuanKiri >= posisi){
+                Kota[i].tujuanKiri--;
+            }
         }
     }
-    for (int i=0;i<posisi;i++){
-        if (Kota[i].tujuanKanan >= posisi){
-            Kota[i].tujuanKanan--;
-        }
-        if (Kota[i].tujuanKiri >= posisi){
-            Kota[i].tujuanKiri--;
-        }
+    else{
+        cout << "Kota yang akan dihapus tidak ditemukan !" << endl;
     }
 }
 
